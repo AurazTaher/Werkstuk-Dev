@@ -14,21 +14,33 @@ app.listen(port, ()=>{
 
 app.get("/api/tasks", async (req,res) => {
     let tasks = await db.getTasks(mongoClient)
+    console.log(tasks)
     res.send(tasks)
+})
+
+app.get("/api/task/:id", async (req,res)=>{
+    let id = new mongoDb.ObjectId(`${req.params.id}`)
+    let task = await db.getTask(mongoClient,id)
+    console.log(task)
+    res.send(task)
 })
 
 app.put("/api/insert", async (req,res) =>{
     let task = req.body
-    db.addTask(task,mongoClient)
+    await db.addTask(mongoClient,task)
     res.send(task)
 })
 
-app.put("/api/update/task/:id", (req,res) =>{
-    //TODO
-    res.send("Update endpoint " + req.params.id)
+app.put("/api/update/task/:id", async (req,res) =>{
+    let id = new mongoDb.ObjectId(`${req.params.id}`)
+    let newTask = req.body
+    await db.updateTask(mongoClient,id,newTask)
+    let task = await db.getTask(mongoClient,id)
+    res.send(task)
 })
 
-app.delete("/api/delete/task/:id", (req,res) => {
-    //TODO
-    res.send("Delete endpoint " + req.params.id)
+app.delete("/api/delete/task/:id", async (req,res) => {
+    let id = new mongoDb.ObjectId(`${req.params.id}`)
+    await db.deleteTask(mongoClient, id)
+    res.send(`task with id: ${id} has been deleted`)
 })

@@ -12,7 +12,7 @@ async function getTasks(mongodb){
     return tasks
 }
 
-async function addTask(task,mongodb){
+async function addTask(mongodb,task){
     const client = await mongodb.connect(uri, { 
         useNewUrlParser: true, 
         useUnifiedTopology: true,
@@ -28,7 +28,7 @@ async function getTask(mongodb,id){
         useUnifiedTopology: true,
     });
     const db = client.db(dbName).collection("Tasks")
-    let task = await db.findOne({id: id})
+    let task = await db.findOne({_id: id})
     client.close()
     return task
 }
@@ -39,7 +39,7 @@ async function deleteTask(mongodb,id){
         useUnifiedTopology: true,
     });
     const db = client.db(dbName).collection("Tasks")
-    await db.deleteOne({id: id})
+    await db.deleteOne({_id: id})
     client.close()
 }
 
@@ -49,7 +49,7 @@ async function updateTask(mongodb,id,newTask){
         useUnifiedTopology: true,
     });
     const db = client.db(dbName).collection("Tasks")
-    await db.updateOne({id: id},{$set: newTask})
+    await db.updateOne({_id: id},{$set: newTask})
     client.close()
 }
 
