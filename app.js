@@ -14,18 +14,16 @@ app.listen(port, ()=>{
 
 app.get("/api/tasks", async (req,res) => {
     let tasks = await db.getTasks(mongoClient)
-    console.log(tasks)
     res.send(tasks)
 })
 
 app.get("/api/task/:id", async (req,res)=>{
     let id = new mongoDb.ObjectId(`${req.params.id}`)
     let task = await db.getTask(mongoClient,id)
-    console.log(task)
     res.send(task)
 })
 
-app.put("/api/insert", async (req,res) =>{
+app.post("/api/insert", async (req,res) =>{
     let task = req.body
     await db.addTask(mongoClient,task)
     res.send(task)

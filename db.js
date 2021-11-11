@@ -18,8 +18,9 @@ async function addTask(mongodb,task){
         useUnifiedTopology: true,
     });
     const db = client.db(dbName).collection("Tasks")
-    await db.insertOne(task)
+    const addedTask = await db.insertOne(task)
     client.close()
+    return addedTask
 }
 
 async function getTask(mongodb,id){
