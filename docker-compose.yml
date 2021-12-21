@@ -1,0 +1,31 @@
+version: "3.4"
+services:
+  
+  db:
+    image: aurazt/database
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: films
+    ports:
+      - "8080:3306"
+    volumes:
+      - databasevolumes:/var/lib/mysql
+
+  api:
+    image: aurazt/api
+    depends_on:
+      - db
+    environment:
+      PORT: 3000
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_HOST: 10.3.51.233
+      DB_DATABASE: films
+      DB_PORT: 8080
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+
+volumes:
+  databasevolumes:
